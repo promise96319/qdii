@@ -1,0 +1,43 @@
+name: 更新基金数据
+
+on:
+  schedule:
+    # 每天 01:30 UTC = 北京时间 09:30
+    - cron: '30 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 运行单元测试
+        run: python3 -m pytest tests -q
+
+      - name: 抓取数据
+        run: python3 scripts/build.py
+
+      - name: 提交变更
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            git commit -m "chore: 更新基金数据 $(TZ=Asia/Shanghai date +%Y-%m-%d)"
+            git push
+          fi

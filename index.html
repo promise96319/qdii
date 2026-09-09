@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>纳指100 / 标普500 场外基金限额速查</title>
+<style>
+:root{
+  --bg:#fafaf9; --surface:#ffffff; --text:#1c1e21; --muted:#6b7280;
+  --line:#e5e7eb; --ok:#0f7b3f; --warn:#a16207; --off:#9ca3af;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --surface:#171a1f; --text:#e8e6e3; --muted:#9096a1;
+    --line:#2a2f37; --ok:#3fbd6d; --warn:#d9a441; --off:#6b7280;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --surface:#171a1f; --text:#e8e6e3; --muted:#9096a1;
+  --line:#2a2f37; --ok:#3fbd6d; --warn:#d9a441; --off:#6b7280;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:16px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:17px;margin:0;font-weight:600}
+.meta{color:var(--muted);font-size:12px}
+.summary{display:flex;gap:16px;margin:12px 0;font-size:13px}
+.summary b{font-family:var(--mono);font-size:16px}
+button{font:inherit;color:var(--text);background:var(--surface);
+  border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
+table{width:100%;border-collapse:collapse;background:var(--surface)}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);
+  height:36px;white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:500;cursor:pointer;user-select:none}
+th[aria-sort="ascending"]::after{content:" ▲"}
+th[aria-sort="descending"]::after{content:" ▼"}
+td.limit{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:16px;font-weight:600}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;
+  margin-right:5px;vertical-align:middle}
+.s-ok .dot{background:var(--ok)} .s-warn .dot{background:var(--warn)}
+.s-off .dot{background:var(--off)}
+.s-ok{color:var(--ok)} .s-warn{color:var(--warn)} .s-off{color:var(--off)}
+tr.stale{opacity:.55}
+.group-title{margin:24px 0 8px;font-size:14px;font-weight:600}
+footer{margin:32px 0 16px;color:var(--muted);font-size:12px;line-height:1.7}
+.cards{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+  padding:10px 12px;margin-bottom:8px}
+.card summary{display:flex;align-items:center;gap:10px;cursor:pointer;
+  list-style:none;outline-offset:2px}
+.card summary::-webkit-details-marker{display:none}
+.card .cname{display:block;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:13px}
+.card .ccode{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card .climit{display:block;font-family:var(--mono);
+  font-variant-numeric:tabular-nums;font-size:19px;font-weight:600;
+  text-align:right;line-height:1.1}
+.card .cfee{display:block;font-family:var(--mono);font-size:11px;
+  color:var(--muted);text-align:right}
+.card .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12px}
+.card .detail dt{color:var(--muted)}
+.card .detail dd{margin:0;font-family:var(--mono);
+  font-variant-numeric:tabular-nums;text-align:right}
+.card.stale{opacity:.55}
+
+@media (max-width:768px){
+  .wrap{padding:12px}
+  h1{font-size:15px}
+  table{display:none}
+  .cards{display:block}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>纳指100 / 标普500 场外基金限额速查</h1>
+    <span class="meta" id="meta"></span>
+    <button id="theme" style="margin-left:auto" aria-label="切换主题">◐</button>
+  </header>
+  <div class="summary" id="summary"></div>
+  <div id="content"></div>
+  <footer>
+    数据来源：天天基金（限额/费率）、蚂蚁基金（支付宝在售状态）。
+    限额由基金公司公告设定，各代销渠道合并计算，同一代码在支付宝与微信共用额度；
+    A/C 类为独立代码、独立额度。<br>
+    申购费为天天基金折后价，支付宝折扣可能不同。
+    <b>实际以下单页为准。</b>本页不构成投资建议。
+  </footer>
+</div>
+<script>
+const themeBtn = document.getElementById('theme');
+try {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.dataset.theme = saved;
+} catch (e) {}
+themeBtn.addEventListener('click', () => {
+  const cur = document.documentElement.dataset.theme;
+  const isDark = cur ? cur === 'dark'
+    : matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+
+const SUSPENDED = '暂停申购';
+const fmtLimit = v => v == null ? '—' : (v >= 1 ? String(v) : v.toFixed(2));
+const fmtPct = v => v == null ? '—' : v.toFixed(2) + '%';
+const fmtDays = d => {
+  if (d == null) return '无免费档';
+  if (d % 365 === 0) return (d / 365) + '年';
+  return d + '天';
+};
+const statusClass = f => {
+  if (f.status === SUSPENDED) return 's-off';
+  // 限额未披露时不可标为充裕——未知不等于宽松
+  if (f.max_buy == null) return 's-warn';
+  return f.max_buy < 100 ? 's-warn' : 's-ok';
+};
+const alipayLabel = a =>
+  a === '正常申购' ? '有' : a === '暂停销售' ? '暂停' : a === '不可售' ? '无' : '—';
+
+let STATE = { funds: [], sortKey: 'default', sortAsc: true };
+
+async function load() {
+  const res = await fetch('data/latest.json?t=' + Date.now());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+const COLUMNS = [
+  { key: 'code',             label: '代码'    },
+  { key: 'name',             label: '名称'    },
+  { key: 'max_buy',          label: '限额(元)' },
+  { key: 'status',           label: '状态'    },
+  { key: 'fee_annual',       label: '年费'    },
+  { key: 'fee_buy',          label: '买入'    },
+  { key: 'worst_redeem',     label: '卖出'    },
+  { key: 'redeem_free_days', label: '免赎回费' },
+  { key: 'alipay',           label: '支付宝'  },
+];
+
+const worstRedeem = f =>
+  (f.redeem_tiers && f.redeem_tiers.length) ? f.redeem_tiers[0].rate : null;
+
+function rowHtml(f) {
+  const cls = statusClass(f);
+  return `<tr class="${f.stale ? 'stale' : ''}">
+    <td class="num">${f.code}</td>
+    <td>${f.name}</td>
+    <td class="limit">${f.status === SUSPENDED ? '—' : fmtLimit(f.max_buy)}</td>
+    <td class="${cls}"><span class="dot"></span>${f.status || '—'}</td>
+    <td class="num">${fmtPct(f.fee_annual)}</td>
+    <td class="num">${fmtPct(f.fee_buy)}</td>
+    <td class="num">${fmtPct(worstRedeem(f))}</td>
+    <td class="num">${fmtDays(f.redeem_free_days)}</td>
+    <td>${alipayLabel(f.alipay)}</td>
+  </tr>`;
+}
+
+function tableHtml(list) {
+  const head = COLUMNS.map(c => {
+    const sorted = STATE.sortKey === c.key
+      ? ` aria-sort="${STATE.sortAsc ? 'ascending' : 'descending'}"` : '';
+    return `<th data-key="${c.key}" tabindex="0" role="button"${sorted}>${c.label}</th>`;
+  }).join('');
+  return `<table><thead><tr>${head}</tr></thead>
+    <tbody>${list.map(rowHtml).join('')}</tbody></table>`;
+}
+
+const isMobile = () => matchMedia('(max-width:768px)').matches;
+
+function cardHtml(f) {
+  const cls = statusClass(f);
+  const limit = f.status === SUSPENDED ? '—' : fmtLimit(f.max_buy);
+  return `<details class="card ${f.stale ? 'stale' : ''}">
+    <summary>
+      <span style="flex:1;min-width:0">
+        <span class="cname">${f.name}</span>
+        <span class="ccode">${f.code}</span>
+        <span class="${cls}" style="font-size:11px">
+          <span class="dot"></span>${f.status || '—'}</span>
+      </span>
+      <span>
+        <span class="climit">${limit}</span>
+        <span class="cfee">年费 ${fmtPct(f.fee_annual)}</span>
+      </span>
+    </summary>
+    <dl class="detail">
+      <dt>买入费率</dt><dd>${fmtPct(f.fee_buy)}</dd>
+      <dt>卖出费率(最短持有)</dt><dd>${fmtPct(worstRedeem(f))}</dd>
+      <dt>免赎回费</dt><dd>${fmtDays(f.redeem_free_days)}</dd>
+      <dt>管理/托管/销服</dt><dd>${fmtPct(f.fee_mgmt)} / ${fmtPct(f.fee_trustee)} / ${fmtPct(f.fee_sales)}</dd>
+      <dt>买入确认</dt><dd>${f.confirm_days ? 'T+' + f.confirm_days : '—'}</dd>
+      <dt>支付宝</dt><dd>${alipayLabel(f.alipay)}</dd>
+    </dl>
+  </details>`;
+}
+
+function listHtml(list) {
+  return tableHtml(list) + `<div class="cards">${list.map(cardHtml).join('')}</div>`;
+}
+
+function render() {
+  const funds = STATE.funds;
+  const buyable = funds.filter(f => f.status !== SUSPENDED);
+  const paused = funds.filter(f => f.status === SUSPENDED);
+
+  document.getElementById('summary').innerHTML =
+    `<span>今日可买 <b class="s-ok">${buyable.length}</b> 只</span>
+     <span>暂停 <b class="s-off">${paused.length}</b> 只</span>`;
+
+  const groups = [
+    ['纳斯达克 100', buyable.filter(f => f.index === 'NDX100')],
+    ['标普 500',     buyable.filter(f => f.index === 'SP500')],
+  ];
+  let html = groups.map(([title, list]) => list.length
+    ? `<h2 class="group-title">${title}（${list.length}）</h2>${listHtml(list)}`
+    : `<h2 class="group-title">${title}</h2><p class="meta">今日无可申购基金</p>`
+  ).join('');
+
+  html += `<details><summary class="group-title" style="cursor:pointer">
+    已暂停申购（${paused.length}）</summary>${listHtml(paused)}</details>`;
+  document.getElementById('content').innerHTML = html;
+  bindSort();
+}
+
+function bindSort() {
+  document.querySelectorAll('th[data-key]').forEach(th => {
+    const act = () => {
+      const key = th.dataset.key;
+      STATE.sortAsc = STATE.sortKey === key ? !STATE.sortAsc : true;
+      STATE.sortKey = key;
+      const dir = STATE.sortAsc ? 1 : -1;
+      const val = f => key === 'worst_redeem' ? worstRedeem(f) : f[key];
+      STATE.funds.sort((a, b) => {
+        const x = val(a), y = val(b);
+        if (x == null && y == null) return 0;
+        if (x == null) return 1;
+        if (y == null) return -1;
+        return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * dir;
+      });
+      render();   // 表头的 aria-sort 由 STATE 在 tableHtml 中渲染
+    };
+    th.addEventListener('click', act);
+    th.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); }
+    });
+  });
+}
+
+load().then(d => {
+  STATE.funds = d.funds;
+  const today = new Date().toISOString().slice(0, 10);
+  const staleWarn = d.date !== today
+    ? ` <b style="color:var(--warn)">数据来自 ${d.date}，非今日</b>` : '';
+  document.getElementById('meta').innerHTML = `更新于 ${d.updated_at}${staleWarn}`;
+  render();
+}).catch(e => {
+  document.getElementById('content').innerHTML =
+    `<p class="meta">数据加载失败：${e.message}</p>`;
+});
+</script>
+</body>
+</html>

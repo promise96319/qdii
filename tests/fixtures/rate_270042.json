@@ -1,0 +1,120 @@
+{
+  "Datas": {
+    "FEATURE": "055,317,318,319",
+    "SGZT": "限大额",
+    "SHZT": "开放赎回",
+    "DTZT": "1",
+    "MINSG": "5",
+    "MINDT": "5",
+    "MAXSG": "5",
+    "MINSSG": "5",
+    "MINSBSG": "5",
+    "SSBCFMDATA": "2",
+    "RDMCFMDATA": "2",
+    "DRAWCFMDATA": "4",
+    "STKTOCASH": "0",
+    "IPESTART1": "--",
+    "IPEEND1": "--",
+    "SHIPESTART1": "--",
+    "SHIPEEND1": "--",
+    "KFR": "--",
+    "MGREXP": "0.80%",
+    "TRUSTEXP": "0.20%",
+    "SALESEXP": "0.00%",
+    "OPENTYPE": "--",
+    "PRSVPERIOD": "",
+    "PRSVDATE": "",
+    "CYCLE": "",
+    "DUEDATE": "",
+    "OPESTART": "--",
+    "OPEEND": "--",
+    "ISNEW": "--",
+    "ISNEWSH": "--",
+    "ispublish": "1",
+    "rg": [
+      {
+        "money": "购买金额 < 100万",
+        "time": "",
+        "source": "",
+        "rate": "1.10%"
+      },
+      {
+        "money": "100万 ≤ 购买金额 < 500万",
+        "time": "",
+        "source": "",
+        "rate": "0.60%"
+      },
+      {
+        "money": "500万 ≤ 购买金额 < 1000万",
+        "time": "",
+        "source": "",
+        "rate": "0.20%"
+      },
+      {
+        "money": "购买金额 ≥ 1000万",
+        "time": "",
+        "source": "",
+        "rate": "1000元/笔"
+      }
+    ],
+    "rghd": [],
+    "sg": [
+      {
+        "money": "购买金额 < 100万",
+        "time": "",
+        "source": "1.30%",
+        "rate": "0.13%"
+      },
+      {
+        "money": "100万 ≤ 购买金额 < 500万",
+        "time": "",
+        "source": "0.70%",
+        "rate": "0.07%"
+      },
+      {
+        "money": "500万 ≤ 购买金额 < 1000万",
+        "time": "",
+        "source": "0.20%",
+        "rate": "0.02%"
+      },
+      {
+        "money": "购买金额 ≥ 1000万",
+        "time": "",
+        "source": "1000元/笔",
+        "rate": "1000元/笔"
+      }
+    ],
+    "sghd": [],
+    "sh": [
+      {
+        "money": "",
+        "time": "持有期限 < 7天",
+        "source": "",
+        "rate": "1.50%"
+      },
+      {
+        "money": "",
+        "time": "7天 ≤ 持有期限 < 1年",
+        "source": "",
+        "rate": "0.50%"
+      },
+      {
+        "money": "",
+        "time": "1年 ≤ 持有期限 < 2年",
+        "source": "",
+        "rate": "0.30%"
+      },
+      {
+        "money": "",
+        "time": "持有期限 ≥ 2年",
+        "source": "",
+        "rate": "0.00%"
+      }
+    ],
+    "shhd": []
+  },
+  "ErrCode": 0,
+  "ErrMsg": null,
+  "TotalCount": 1,
+  "Expansion": null
+}
