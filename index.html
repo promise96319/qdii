@@ -90,8 +90,12 @@ const fmtDays = d => {
   if (d % 365 === 0) return (d / 365) + '年';
   return d + '天';
 };
-const statusClass = f =>
-  f.status === SUSPENDED ? 's-off' : (f.max_buy != null && f.max_buy < 100 ? 's-warn' : 's-ok');
+const statusClass = f => {
+  if (f.status === SUSPENDED) return 's-off';
+  // 限额未披露时不可标为充裕——未知不等于宽松
+  if (f.max_buy == null) return 's-warn';
+  return f.max_buy < 100 ? 's-warn' : 's-ok';
+};
 const alipayLabel = a =>
   a === '正常申购' ? '有' : a === '暂停销售' ? '暂停' : a === '不可售' ? '无' : '—';
 
@@ -134,8 +138,11 @@ function rowHtml(f) {
 }
 
 function tableHtml(list) {
-  const head = COLUMNS.map(c =>
-    `<th data-key="${c.key}" tabindex="0" role="button">${c.label}</th>`).join('');
+  const head = COLUMNS.map(c => {
+    const sorted = STATE.sortKey === c.key
+      ? ` aria-sort="${STATE.sortAsc ? 'ascending' : 'descending'}"` : '';
+    return `<th data-key="${c.key}" tabindex="0" role="button"${sorted}>${c.label}</th>`;
+  }).join('');
   return `<table><thead><tr>${head}</tr></thead>
     <tbody>${list.map(rowHtml).join('')}</tbody></table>`;
 }
@@ -179,10 +186,7 @@ function bindSort() {
         if (y == null) return -1;
         return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * dir;
       });
-      render();
-      document.querySelectorAll('th[data-key]').forEach(o =>
-        o.removeAttribute('aria-sort'));
-      th.setAttribute('aria-sort', STATE.sortAsc ? 'ascending' : 'descending');
+      render();   // 表头的 aria-sort 由 STATE 在 tableHtml 中渲染
     };
     th.addEventListener('click', act);
     th.addEventListener('keydown', e => {
