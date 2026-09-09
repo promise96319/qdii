@@ -48,6 +48,33 @@ td.limit{font-family:var(--mono);font-variant-numeric:tabular-nums;
 tr.stale{opacity:.55}
 .group-title{margin:24px 0 8px;font-size:14px;font-weight:600}
 footer{margin:32px 0 16px;color:var(--muted);font-size:12px;line-height:1.7}
+.cards{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+  padding:10px 12px;margin-bottom:8px}
+.card summary{display:flex;align-items:center;gap:10px;cursor:pointer;
+  list-style:none;outline-offset:2px}
+.card summary::-webkit-details-marker{display:none}
+.card .cname{display:block;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:13px}
+.card .ccode{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card .climit{display:block;font-family:var(--mono);
+  font-variant-numeric:tabular-nums;font-size:19px;font-weight:600;
+  text-align:right;line-height:1.1}
+.card .cfee{display:block;font-family:var(--mono);font-size:11px;
+  color:var(--muted);text-align:right}
+.card .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12px}
+.card .detail dt{color:var(--muted)}
+.card .detail dd{margin:0;font-family:var(--mono);
+  font-variant-numeric:tabular-nums;text-align:right}
+.card.stale{opacity:.55}
+
+@media (max-width:768px){
+  .wrap{padding:12px}
+  h1{font-size:15px}
+  table{display:none}
+  .cards{display:block}
+}
 </style>
 </head>
 <body>
@@ -147,6 +174,39 @@ function tableHtml(list) {
     <tbody>${list.map(rowHtml).join('')}</tbody></table>`;
 }
 
+const isMobile = () => matchMedia('(max-width:768px)').matches;
+
+function cardHtml(f) {
+  const cls = statusClass(f);
+  const limit = f.status === SUSPENDED ? '—' : fmtLimit(f.max_buy);
+  return `<details class="card ${f.stale ? 'stale' : ''}">
+    <summary>
+      <span style="flex:1;min-width:0">
+        <span class="cname">${f.name}</span>
+        <span class="ccode">${f.code}</span>
+        <span class="${cls}" style="font-size:11px">
+          <span class="dot"></span>${f.status || '—'}</span>
+      </span>
+      <span>
+        <span class="climit">${limit}</span>
+        <span class="cfee">年费 ${fmtPct(f.fee_annual)}</span>
+      </span>
+    </summary>
+    <dl class="detail">
+      <dt>买入费率</dt><dd>${fmtPct(f.fee_buy)}</dd>
+      <dt>卖出费率(最短持有)</dt><dd>${fmtPct(worstRedeem(f))}</dd>
+      <dt>免赎回费</dt><dd>${fmtDays(f.redeem_free_days)}</dd>
+      <dt>管理/托管/销服</dt><dd>${fmtPct(f.fee_mgmt)} / ${fmtPct(f.fee_trustee)} / ${fmtPct(f.fee_sales)}</dd>
+      <dt>买入确认</dt><dd>${f.confirm_days ? 'T+' + f.confirm_days : '—'}</dd>
+      <dt>支付宝</dt><dd>${alipayLabel(f.alipay)}</dd>
+    </dl>
+  </details>`;
+}
+
+function listHtml(list) {
+  return tableHtml(list) + `<div class="cards">${list.map(cardHtml).join('')}</div>`;
+}
+
 function render() {
   const funds = STATE.funds;
   const buyable = funds.filter(f => f.status !== SUSPENDED);
@@ -161,12 +221,12 @@ function render() {
     ['标普 500',     buyable.filter(f => f.index === 'SP500')],
   ];
   let html = groups.map(([title, list]) => list.length
-    ? `<h2 class="group-title">${title}（${list.length}）</h2>${tableHtml(list)}`
+    ? `<h2 class="group-title">${title}（${list.length}）</h2>${listHtml(list)}`
     : `<h2 class="group-title">${title}</h2><p class="meta">今日无可申购基金</p>`
   ).join('');
 
   html += `<details><summary class="group-title" style="cursor:pointer">
-    已暂停申购（${paused.length}）</summary>${tableHtml(paused)}</details>`;
+    已暂停申购（${paused.length}）</summary>${listHtml(paused)}</details>`;
   document.getElementById('content').innerHTML = html;
   bindSort();
 }
