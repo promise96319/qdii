@@ -1,0 +1,71 @@
+{
+  "Datas": {
+    "FEATURE": "055,080,311,318",
+    "SGZT": "限大额",
+    "SHZT": "开放赎回",
+    "DTZT": "",
+    "MINSG": "0.1",
+    "MINDT": "",
+    "MAXSG": "",
+    "MINSSG": "",
+    "MINSBSG": "",
+    "SSBCFMDATA": "2",
+    "RDMCFMDATA": "2",
+    "DRAWCFMDATA": "",
+    "STKTOCASH": "0",
+    "IPESTART1": "--",
+    "IPEEND1": "--",
+    "SHIPESTART1": "--",
+    "SHIPEEND1": "--",
+    "KFR": "--",
+    "MGREXP": "0.50%",
+    "TRUSTEXP": "0.10%",
+    "SALESEXP": "0.20%",
+    "OPENTYPE": "--",
+    "PRSVPERIOD": "",
+    "PRSVDATE": "",
+    "CYCLE": "",
+    "DUEDATE": "",
+    "OPESTART": "--",
+    "OPEEND": "--",
+    "ISNEW": "--",
+    "ISNEWSH": "--",
+    "ispublish": "1",
+    "rg": [],
+    "rghd": [],
+    "sg": [
+      {
+        "money": "",
+        "time": "",
+        "source": "",
+        "rate": "0.00%"
+      }
+    ],
+    "sghd": [],
+    "sh": [
+      {
+        "money": "",
+        "time": "持有期限 < 7天",
+        "source": "",
+        "rate": "1.50%"
+      },
+      {
+        "money": "",
+        "time": "7天 ≤ 持有期限 < 30天",
+        "source": "",
+        "rate": "1.00%"
+      },
+      {
+        "money": "",
+        "time": "持有期限 ≥ 30天",
+        "source": "",
+        "rate": "0.00%"
+      }
+    ],
+    "shhd": []
+  },
+  "ErrCode": 0,
+  "ErrMsg": null,
+  "TotalCount": 1,
+  "Expansion": null
+}
