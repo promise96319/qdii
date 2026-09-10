@@ -1,6 +1,10 @@
 # QDII 场外基金限额速查
 
-**线上地址：https://promise96319.github.io/qdii/**
+**线上地址：https://qdii.qinguanghui.com**
+（备用：https://promise96319.github.io/qdii/）
+
+> 仓库根目录的 `CNAME` 文件是自定义域名的绑定凭据，**请勿删除**，
+> 删除后 qdii.qinguanghui.com 将失效。
 
 每日自动更新纳斯达克 100 与标普 500 **场外**基金的申购限额、申购状态与各项费率。
 每天北京时间 09:30 由 GitHub Actions 自动抓取更新。
