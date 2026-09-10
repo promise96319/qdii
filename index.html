@@ -5,267 +5,395 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>纳指100 / 标普500 场外基金限额速查</title>
 <style>
+/* ── 设计 token：暖白基调，取自 chekusu.com ───────────────── */
 :root{
-  --bg:#fafaf9; --surface:#ffffff; --text:#1c1e21; --muted:#6b7280;
-  --line:#e5e7eb; --ok:#0f7b3f; --warn:#a16207; --off:#9ca3af;
+  --bg:#faf9f5;                      /* 页面底：米白 */
+  --surface:#fbfaf4;                 /* 卡片：暖白，非纯白 */
+  --surface-soft:rgba(255,255,255,.7);
+  --surface-hover:rgba(13,148,136,.07);
+  --line:#e8e3d8;                    /* 暖灰边框 */
+  --line-soft:rgba(232,227,216,.6);
+  --text:#0f172a;
+  --text-2:#475569;
+  --muted:#94a3b8;
+  --accent:#0d9488;                  /* teal-600 */
+  --accent-soft:rgba(13,148,136,.1);
+  --warn:#b45309;
+  --warn-soft:rgba(180,83,9,.1);
+  --off:#a8a29e;
+  --grad:linear-gradient(to right,#58b23c,#2dd4bf,#60a5fa);
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --shadow:0 10px 30px rgba(32,34,37,.06);
+  --shadow-sm:0 2px 8px rgba(32,34,37,.04);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1115; --surface:#171a1f; --text:#e8e6e3; --muted:#9096a1;
-    --line:#2a2f37; --ok:#3fbd6d; --warn:#d9a441; --off:#6b7280;
+    --bg:#17161a; --surface:#1f1e1c; --surface-soft:rgba(255,255,255,.04);
+    --surface-hover:rgba(45,212,191,.09);
+    --line:#34322d; --line-soft:rgba(52,50,45,.7);
+    --text:#f5f3ee; --text-2:#c3bdb2; --muted:#8a8478;
+    --accent:#2dd4bf; --accent-soft:rgba(45,212,191,.12);
+    --warn:#d9a441; --warn-soft:rgba(217,164,65,.12); --off:#6b665d;
+    --shadow:0 10px 30px rgba(0,0,0,.3); --shadow-sm:0 2px 8px rgba(0,0,0,.2);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1115; --surface:#171a1f; --text:#e8e6e3; --muted:#9096a1;
-  --line:#2a2f37; --ok:#3fbd6d; --warn:#d9a441; --off:#6b7280;
+  --bg:#17161a; --surface:#1f1e1c; --surface-soft:rgba(255,255,255,.04);
+  --surface-hover:rgba(45,212,191,.09);
+  --line:#34322d; --line-soft:rgba(52,50,45,.7);
+  --text:#f5f3ee; --text-2:#c3bdb2; --muted:#8a8478;
+  --accent:#2dd4bf; --accent-soft:rgba(45,212,191,.12);
+  --warn:#d9a441; --warn-soft:rgba(217,164,65,.12); --off:#6b665d;
+  --shadow:0 10px 30px rgba(0,0,0,.3); --shadow-sm:0 2px 8px rgba(0,0,0,.2);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);
-  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
-.wrap{max-width:1120px;margin:0 auto;padding:16px}
+body{
+  margin:0;min-height:100vh;background:var(--bg);color:var(--text);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  transition:background .3s var(--ease),color .3s var(--ease);
+}
+/* 多点径向渐晕，chekusu 的招牌铺底 */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(88,178,60,.13),transparent 38%),
+    radial-gradient(circle at 88% 15%,rgba(96,165,250,.10),transparent 36%),
+    radial-gradient(circle at 78% 85%,rgba(20,184,166,.11),transparent 40%);
+}
+:root[data-theme="dark"] body::before,
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body::before{opacity:.5}}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-h1{font-size:17px;margin:0;font-weight:600}
-.meta{color:var(--muted);font-size:12px}
-.summary{display:flex;gap:16px;margin:12px 0;font-size:13px}
-.summary b{font-family:var(--mono);font-size:16px}
-button{font:inherit;color:var(--text);background:var(--surface);
-  border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
-table{width:100%;border-collapse:collapse;background:var(--surface)}
-th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);
-  height:36px;white-space:nowrap}
-th{font-size:12px;color:var(--muted);font-weight:500;cursor:pointer;user-select:none}
-th[aria-sort="ascending"]::after{content:" ▲"}
-th[aria-sort="descending"]::after{content:" ▼"}
-td.limit{font-family:var(--mono);font-variant-numeric:tabular-nums;
-  font-size:16px;font-weight:600}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;
-  margin-right:5px;vertical-align:middle}
-.s-ok .dot{background:var(--ok)} .s-warn .dot{background:var(--warn)}
-.s-off .dot{background:var(--off)}
-.s-ok{color:var(--ok)} .s-warn{color:var(--warn)} .s-off{color:var(--off)}
-tr.stale{opacity:.55}
-.group-title{margin:24px 0 8px;font-size:14px;font-weight:600}
-footer{margin:32px 0 16px;color:var(--muted);font-size:12px;line-height:1.7}
-.cards{display:none}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;
-  padding:10px 12px;margin-bottom:8px}
-.card summary{display:flex;align-items:center;gap:10px;cursor:pointer;
-  list-style:none;outline-offset:2px}
-.card summary::-webkit-details-marker{display:none}
-.card .cname{display:block;overflow:hidden;text-overflow:ellipsis;
-  white-space:nowrap;font-size:13px}
-.card .ccode{font-family:var(--mono);font-size:11px;color:var(--muted)}
-.card .climit{display:block;font-family:var(--mono);
-  font-variant-numeric:tabular-nums;font-size:19px;font-weight:600;
-  text-align:right;line-height:1.1}
-.card .cfee{display:block;font-family:var(--mono);font-size:11px;
-  color:var(--muted);text-align:right}
-.card .detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
-  display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12px}
-.card .detail dt{color:var(--muted)}
-.card .detail dd{margin:0;font-family:var(--mono);
-  font-variant-numeric:tabular-nums;text-align:right}
-.card.stale{opacity:.55}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 40px}
 
-@media (max-width:768px){
-  .wrap{padding:12px}
-  h1{font-size:15px}
+/* ── 头部 ─────────────────────────────────────────────── */
+header{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
+h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+.sub{margin-top:5px;font-size:12.5px;color:var(--muted)}
+.icon-btn{
+  margin-left:auto;flex:none;width:36px;height:36px;display:grid;place-items:center;
+  font:inherit;font-size:15px;color:var(--text-2);background:var(--surface-soft);
+  border:1px solid var(--line);border-radius:9999px;cursor:pointer;
+  transition:all .3s var(--ease);
+}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ── 概览 ─────────────────────────────────────────────── */
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.stat{
+  flex:1;min-width:130px;background:var(--surface);border:1px solid var(--line-soft);
+  border-radius:16px;padding:14px 18px;box-shadow:var(--shadow-sm);
+  transition:all .3s var(--ease);
+}
+.stat:hover{box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:26px;font-weight:700;line-height:1.15;letter-spacing:-.02em}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.ok b{color:var(--accent)} .stat.off b{color:var(--off)}
+
+/* ── 分组 ─────────────────────────────────────────────── */
+.group{margin-bottom:26px}
+.group-head{display:flex;align-items:baseline;gap:9px;margin:0 0 10px 3px}
+.group-head h2{margin:0;font-size:15px;font-weight:700}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--surface-soft);border:1px solid var(--line);
+  border-radius:9999px;padding:3px 11px;font-size:11.5px;font-weight:600;
+  color:var(--text-2);white-space:nowrap;transition:all .3s var(--ease);
+}
+.panel{
+  background:var(--surface);border:1px solid var(--line-soft);border-radius:16px;
+  box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .3s var(--ease);
+}
+.panel.featured{position:relative}
+.panel.featured::before{
+  content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--grad);
+}
+
+/* ── 表格 ─────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse}
+th,td{padding:0 14px;height:42px;text-align:left;white-space:nowrap;
+  border-bottom:1px solid var(--line-soft)}
+tbody tr:last-child td{border-bottom:none}
+th{
+  font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.02em;
+  cursor:pointer;user-select:none;background:var(--surface-soft);
+  transition:color .2s var(--ease);
+}
+th:hover{color:var(--accent)}
+th:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+th::after{content:"";opacity:.5;font-size:9px;margin-left:3px}
+th[aria-sort="ascending"]{color:var(--accent)}
+th[aria-sort="ascending"]::after{content:"▲"}
+th[aria-sort="descending"]{color:var(--accent)}
+th[aria-sort="descending"]::after{content:"▼"}
+tbody tr{transition:background .2s var(--ease)}
+tbody tr:hover{background:var(--surface-hover)}
+tbody tr td:first-child{box-shadow:inset 0 0 0 0 var(--accent);transition:box-shadow .2s var(--ease)}
+tbody tr:hover td:first-child{box-shadow:inset 2px 0 0 0 var(--accent)}
+td.code{font-family:var(--mono);font-size:12.5px;color:var(--text-2)}
+td.name{max-width:300px;overflow:hidden;text-overflow:ellipsis;font-size:13.5px}
+td.limit{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:17px;font-weight:700;letter-spacing:-.01em}
+td.limit.big{color:var(--accent)}
+td.limit.small{color:var(--warn)}
+td.limit.none{color:var(--muted);font-weight:400}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:12.5px;color:var(--text-2)}
+tr.stale{opacity:.5}
+
+.tag{display:inline-flex;align-items:center;gap:5px;border-radius:9999px;
+  padding:2px 9px;font-size:11px;font-weight:600;border:1px solid;white-space:nowrap}
+.tag.ok{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+.tag.warn{color:var(--warn);border-color:var(--warn-soft);background:var(--warn-soft)}
+.tag.off{color:var(--off);border-color:var(--line);background:transparent}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+.ali{font-size:12px;color:var(--text-2)}
+.ali.no{color:var(--muted)}
+
+/* ── 折叠区 ───────────────────────────────────────────── */
+details.fold{margin-top:8px}
+details.fold>summary{
+  list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:9999px;border:1px solid var(--line);
+  background:var(--surface-soft);font-size:12.5px;font-weight:600;color:var(--text-2);
+  transition:all .3s var(--ease);
+}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary:hover{color:var(--accent);border-color:var(--accent)}
+details.fold>summary::after{content:"▾";font-size:10px;transition:transform .3s var(--ease)}
+details.fold[open]>summary::after{transform:rotate(180deg)}
+details.fold[open]>summary{margin-bottom:10px}
+
+/* ── 移动端卡片 ───────────────────────────────────────── */
+.cards{display:none}
+.fcard{border-bottom:1px solid var(--line-soft)}
+.fcard:last-child{border-bottom:none}
+.fcard>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;
+  padding:13px 16px;transition:background .2s var(--ease);
+}
+.fcard>summary::-webkit-details-marker{display:none}
+.fcard>summary:active{background:var(--surface-hover)}
+.fcard .l{flex:1;min-width:0}
+.fcard .fname{display:block;font-size:13.5px;line-height:1.35;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fcard .fmeta{display:flex;align-items:center;gap:7px;margin-top:5px}
+.fcard .fcode{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fcard .r{text-align:right;flex:none}
+.fcard .flimit{display:block;font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:21px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+.fcard .flimit.big{color:var(--accent)} .fcard .flimit.small{color:var(--warn)}
+.fcard .flimit.none{color:var(--muted);font-weight:400}
+.fcard .ffee{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+.fcard .detail{
+  padding:0 16px 14px;display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:12.5px;
+  animation:slide .3s var(--ease);
+}
+@keyframes slide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.fcard .detail dt{color:var(--muted)}
+.fcard .detail dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.fcard.stale{opacity:.5}
+
+@media (max-width:820px){
+  .wrap{padding:20px 14px 32px}
+  h1{font-size:17px;line-height:1.4}
+  h1 em{display:block}
   table{display:none}
   .cards{display:block}
+  .stat b{font-size:23px}
 }
+
+/* ── 状态 ─────────────────────────────────────────────── */
+.state{padding:44px 20px;text-align:center;color:var(--muted);font-size:13.5px}
+.spin{width:22px;height:22px;margin:0 auto 12px;border-radius:50%;
+  border:2px solid var(--line);border-top-color:var(--accent);animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.warn-bar{
+  display:inline-flex;align-items:center;gap:7px;margin-top:7px;
+  background:var(--warn-soft);color:var(--warn);border-radius:9999px;
+  padding:4px 12px;font-size:12px;font-weight:600;
+}
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line-soft);
+  color:var(--muted);font-size:12px;line-height:1.75}
+footer b{color:var(--text-2)}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>纳指100 / 标普500 场外基金限额速查</h1>
-    <span class="meta" id="meta"></span>
-    <button id="theme" style="margin-left:auto" aria-label="切换主题">◐</button>
+    <div>
+      <h1>纳指100 / 标普500 <em>场外基金限额速查</em></h1>
+      <div class="sub" id="meta"><span class="spin" style="display:inline-block;vertical-align:-4px;margin:0 6px 0 0"></span>加载中…</div>
+    </div>
+    <button class="icon-btn" id="theme" aria-label="切换主题" title="切换亮/暗主题">◐</button>
   </header>
-  <div class="summary" id="summary"></div>
-  <div id="content"></div>
+  <div class="stats" id="stats"></div>
+  <div id="content"><div class="state"><div class="spin"></div>正在加载基金数据</div></div>
   <footer>
-    数据来源：天天基金（限额/费率）、蚂蚁基金（支付宝在售状态）。
-    限额由基金公司公告设定，各代销渠道合并计算，同一代码在支付宝与微信共用额度；
-    A/C 类为独立代码、独立额度。<br>
-    申购费为天天基金折后价，支付宝折扣可能不同。
-    <b>实际以下单页为准。</b>本页不构成投资建议。
+    数据来源：天天基金（限额 / 费率）、蚂蚁基金（支付宝在售状态）。
+    限额由基金公司公告设定，<b>各代销渠道合并计算</b>——同一代码在支付宝与微信共用同一份额度；
+    A 类与 C 类是不同代码，额度独立。<br>
+    申购费为天天基金折后价，支付宝折扣可能不同。<b>实际以下单页面为准，本页不构成投资建议。</b>
+    <a href="https://github.com/promise96319/qdii" target="_blank" rel="noopener">源码</a>
   </footer>
 </div>
 <script>
-const themeBtn = document.getElementById('theme');
-try {
-  const saved = localStorage.getItem('theme');
-  if (saved) document.documentElement.dataset.theme = saved;
-} catch (e) {}
-themeBtn.addEventListener('click', () => {
-  const cur = document.documentElement.dataset.theme;
-  const isDark = cur ? cur === 'dark'
-    : matchMedia('(prefers-color-scheme: dark)').matches;
-  const next = isDark ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem('theme', next); } catch (e) {}
+const SUSPENDED='暂停申购';
+const fmtLimit=v=>v==null?'—':(v>=1?String(v):v.toFixed(2));
+const fmtPct=v=>v==null?'—':v.toFixed(2)+'%';
+const fmtDays=d=>d==null?'无免费档':(d%365===0?(d/365)+'年':d+'天');
+const worst=f=>(f.redeem_tiers&&f.redeem_tiers.length)?f.redeem_tiers[0].rate:null;
+const limitCls=f=>f.status===SUSPENDED||f.max_buy==null?'none':(f.max_buy>=100?'big':'small');
+const tagCls=f=>f.status===SUSPENDED?'off':(f.max_buy==null||f.max_buy<100?'warn':'ok');
+const aliLabel=a=>a==='正常申购'?'可买':a==='暂停销售'?'暂停':a==='不可售'?'不代销':'—';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+let STATE={funds:[],sortKey:null,sortAsc:true};
+
+const themeBtn=document.getElementById('theme');
+try{const s=localStorage.getItem('theme');if(s)document.documentElement.dataset.theme=s;}catch(e){}
+themeBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.dataset.theme;
+  const dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  const next=dark?'light':'dark';
+  document.documentElement.dataset.theme=next;
+  try{localStorage.setItem('theme',next);}catch(e){}
 });
 
-const SUSPENDED = '暂停申购';
-const fmtLimit = v => v == null ? '—' : (v >= 1 ? String(v) : v.toFixed(2));
-const fmtPct = v => v == null ? '—' : v.toFixed(2) + '%';
-const fmtDays = d => {
-  if (d == null) return '无免费档';
-  if (d % 365 === 0) return (d / 365) + '年';
-  return d + '天';
-};
-const statusClass = f => {
-  if (f.status === SUSPENDED) return 's-off';
-  // 限额未披露时不可标为充裕——未知不等于宽松
-  if (f.max_buy == null) return 's-warn';
-  return f.max_buy < 100 ? 's-warn' : 's-ok';
-};
-const alipayLabel = a =>
-  a === '正常申购' ? '有' : a === '暂停销售' ? '暂停' : a === '不可售' ? '无' : '—';
-
-let STATE = { funds: [], sortKey: 'default', sortAsc: true };
-
-async function load() {
-  const res = await fetch('data/latest.json?t=' + Date.now());
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-}
-
-const COLUMNS = [
-  { key: 'code',             label: '代码'    },
-  { key: 'name',             label: '名称'    },
-  { key: 'max_buy',          label: '限额(元)' },
-  { key: 'status',           label: '状态'    },
-  { key: 'fee_annual',       label: '年费'    },
-  { key: 'fee_buy',          label: '买入'    },
-  { key: 'worst_redeem',     label: '卖出'    },
-  { key: 'redeem_free_days', label: '免赎回费' },
-  { key: 'alipay',           label: '支付宝'  },
+const COLS=[
+  {k:'code',label:'代码'},{k:'name',label:'名称'},{k:'max_buy',label:'限额 (元)'},
+  {k:'status',label:'状态'},{k:'fee_annual',label:'年费'},{k:'fee_buy',label:'买入'},
+  {k:'worst_redeem',label:'卖出'},{k:'redeem_free_days',label:'免赎回费'},{k:'alipay',label:'支付宝'}
 ];
 
-const worstRedeem = f =>
-  (f.redeem_tiers && f.redeem_tiers.length) ? f.redeem_tiers[0].rate : null;
-
-function rowHtml(f) {
-  const cls = statusClass(f);
-  return `<tr class="${f.stale ? 'stale' : ''}">
-    <td class="num">${f.code}</td>
-    <td>${f.name}</td>
-    <td class="limit">${f.status === SUSPENDED ? '—' : fmtLimit(f.max_buy)}</td>
-    <td class="${cls}"><span class="dot"></span>${f.status || '—'}</td>
-    <td class="num">${fmtPct(f.fee_annual)}</td>
-    <td class="num">${fmtPct(f.fee_buy)}</td>
-    <td class="num">${fmtPct(worstRedeem(f))}</td>
-    <td class="num">${fmtDays(f.redeem_free_days)}</td>
-    <td>${alipayLabel(f.alipay)}</td>
+function rowHtml(f){
+  return `<tr class="${f.stale?'stale':''}">
+    <td class="code">${esc(f.code)}</td>
+    <td class="name" title="${esc(f.name)}">${esc(f.name)}</td>
+    <td class="limit ${limitCls(f)}">${f.status===SUSPENDED?'—':fmtLimit(f.max_buy)}</td>
+    <td><span class="tag ${tagCls(f)}"><i class="dot"></i>${esc(f.status||'—')}</span></td>
+    <td class="n">${fmtPct(f.fee_annual)}</td>
+    <td class="n">${fmtPct(f.fee_buy)}</td>
+    <td class="n">${fmtPct(worst(f))}</td>
+    <td class="n">${fmtDays(f.redeem_free_days)}</td>
+    <td><span class="ali ${f.alipay==='正常申购'?'':'no'}">${aliLabel(f.alipay)}</span></td>
   </tr>`;
 }
-
-function tableHtml(list) {
-  const head = COLUMNS.map(c => {
-    const sorted = STATE.sortKey === c.key
-      ? ` aria-sort="${STATE.sortAsc ? 'ascending' : 'descending'}"` : '';
-    return `<th data-key="${c.key}" tabindex="0" role="button"${sorted}>${c.label}</th>`;
-  }).join('');
-  return `<table><thead><tr>${head}</tr></thead>
-    <tbody>${list.map(rowHtml).join('')}</tbody></table>`;
-}
-
-const isMobile = () => matchMedia('(max-width:768px)').matches;
-
-function cardHtml(f) {
-  const cls = statusClass(f);
-  const limit = f.status === SUSPENDED ? '—' : fmtLimit(f.max_buy);
-  return `<details class="card ${f.stale ? 'stale' : ''}">
+function cardHtml(f){
+  return `<details class="fcard ${f.stale?'stale':''}">
     <summary>
-      <span style="flex:1;min-width:0">
-        <span class="cname">${f.name}</span>
-        <span class="ccode">${f.code}</span>
-        <span class="${cls}" style="font-size:11px">
-          <span class="dot"></span>${f.status || '—'}</span>
+      <span class="l">
+        <span class="fname">${esc(f.name)}</span>
+        <span class="fmeta">
+          <span class="fcode">${esc(f.code)}</span>
+          <span class="tag ${tagCls(f)}"><i class="dot"></i>${esc(f.status||'—')}</span>
+        </span>
       </span>
-      <span>
-        <span class="climit">${limit}</span>
-        <span class="cfee">年费 ${fmtPct(f.fee_annual)}</span>
+      <span class="r">
+        <span class="flimit ${limitCls(f)}">${f.status===SUSPENDED?'—':fmtLimit(f.max_buy)}</span>
+        <span class="ffee">年费 ${fmtPct(f.fee_annual)}</span>
       </span>
     </summary>
     <dl class="detail">
       <dt>买入费率</dt><dd>${fmtPct(f.fee_buy)}</dd>
-      <dt>卖出费率(最短持有)</dt><dd>${fmtPct(worstRedeem(f))}</dd>
+      <dt>卖出费率（最短持有）</dt><dd>${fmtPct(worst(f))}</dd>
       <dt>免赎回费</dt><dd>${fmtDays(f.redeem_free_days)}</dd>
-      <dt>管理/托管/销服</dt><dd>${fmtPct(f.fee_mgmt)} / ${fmtPct(f.fee_trustee)} / ${fmtPct(f.fee_sales)}</dd>
-      <dt>买入确认</dt><dd>${f.confirm_days ? 'T+' + f.confirm_days : '—'}</dd>
-      <dt>支付宝</dt><dd>${alipayLabel(f.alipay)}</dd>
+      <dt>管理 / 托管 / 销服</dt><dd>${fmtPct(f.fee_mgmt)} / ${fmtPct(f.fee_trustee)} / ${fmtPct(f.fee_sales)}</dd>
+      <dt>买入确认</dt><dd>${f.confirm_days?'T+'+f.confirm_days:'—'}</dd>
+      <dt>支付宝</dt><dd>${aliLabel(f.alipay)}</dd>
     </dl>
   </details>`;
 }
-
-function listHtml(list) {
-  return tableHtml(list) + `<div class="cards">${list.map(cardHtml).join('')}</div>`;
+function tableHtml(list){
+  const head=COLS.map(c=>{
+    const s=STATE.sortKey===c.k?` aria-sort="${STATE.sortAsc?'ascending':'descending'}"`:'';
+    return `<th data-key="${c.k}" tabindex="0" role="button"${s}>${c.label}</th>`;
+  }).join('');
+  return `<table><thead><tr>${head}</tr></thead><tbody>${list.map(rowHtml).join('')}</tbody></table>`;
+}
+function panelHtml(list,featured){
+  return `<div class="panel${featured?' featured':''}">
+    ${tableHtml(list)}<div class="cards">${list.map(cardHtml).join('')}</div></div>`;
 }
 
-function render() {
-  const funds = STATE.funds;
-  const buyable = funds.filter(f => f.status !== SUSPENDED);
-  const paused = funds.filter(f => f.status === SUSPENDED);
+function render(){
+  const funds=STATE.funds;
+  const buyable=funds.filter(f=>f.status!==SUSPENDED);
+  const paused=funds.filter(f=>f.status===SUSPENDED);
+  const total=buyable.reduce((s,f)=>s+(f.max_buy||0),0);
 
-  document.getElementById('summary').innerHTML =
-    `<span>今日可买 <b class="s-ok">${buyable.length}</b> 只</span>
-     <span>暂停 <b class="s-off">${paused.length}</b> 只</span>`;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat ok"><b>${buyable.length}</b><span>今日可申购</span></div>
+    <div class="stat off"><b>${paused.length}</b><span>暂停申购</span></div>
+    <div class="stat"><b>${total.toLocaleString()}</b><span>限额合计（元 / 日）</span></div>`;
 
-  const groups = [
-    ['纳斯达克 100', buyable.filter(f => f.index === 'NDX100')],
-    ['标普 500',     buyable.filter(f => f.index === 'SP500')],
-  ];
-  let html = groups.map(([title, list]) => list.length
-    ? `<h2 class="group-title">${title}（${list.length}）</h2>${listHtml(list)}`
-    : `<h2 class="group-title">${title}</h2><p class="meta">今日无可申购基金</p>`
-  ).join('');
+  const groups=[['纳斯达克 100','NDX100',true],['标普 500','SP500',false]];
+  let html=groups.map(([title,idx,feat])=>{
+    const list=buyable.filter(f=>f.index===idx);
+    const sum=list.reduce((s,f)=>s+(f.max_buy||0),0);
+    return `<section class="group">
+      <div class="group-head"><h2>${title}</h2>
+        <span class="pill">${list.length} 只可买</span>
+        <span class="pill">合计 ${sum.toLocaleString()} 元</span></div>
+      ${list.length?panelHtml(list,feat):'<div class="panel"><div class="state">今日无可申购基金</div></div>'}
+    </section>`;
+  }).join('');
 
-  html += `<details><summary class="group-title" style="cursor:pointer">
-    已暂停申购（${paused.length}）</summary>${listHtml(paused)}</details>`;
-  document.getElementById('content').innerHTML = html;
+  if(paused.length){
+    html+=`<details class="fold"><summary>已暂停申购的 ${paused.length} 只</summary>
+      ${panelHtml(paused,false)}</details>`;
+  }
+  document.getElementById('content').innerHTML=html;
   bindSort();
 }
 
-function bindSort() {
-  document.querySelectorAll('th[data-key]').forEach(th => {
-    const act = () => {
-      const key = th.dataset.key;
-      STATE.sortAsc = STATE.sortKey === key ? !STATE.sortAsc : true;
-      STATE.sortKey = key;
-      const dir = STATE.sortAsc ? 1 : -1;
-      const val = f => key === 'worst_redeem' ? worstRedeem(f) : f[key];
-      STATE.funds.sort((a, b) => {
-        const x = val(a), y = val(b);
-        if (x == null && y == null) return 0;
-        if (x == null) return 1;
-        if (y == null) return -1;
-        return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * dir;
+function bindSort(){
+  document.querySelectorAll('th[data-key]').forEach(th=>{
+    const act=()=>{
+      const k=th.dataset.key;
+      STATE.sortAsc=STATE.sortKey===k?!STATE.sortAsc:true;
+      STATE.sortKey=k;
+      const dir=STATE.sortAsc?1:-1;
+      const val=f=>k==='worst_redeem'?worst(f):f[k];
+      STATE.funds.sort((a,b)=>{
+        const x=val(a),y=val(b);
+        if(x==null&&y==null)return 0;
+        if(x==null)return 1;
+        if(y==null)return -1;
+        return (typeof x==='number'?x-y:String(x).localeCompare(String(y)))*dir;
       });
-      render();   // 表头的 aria-sort 由 STATE 在 tableHtml 中渲染
+      render();
     };
-    th.addEventListener('click', act);
-    th.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); }
+    th.addEventListener('click',act);
+    th.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}
     });
   });
 }
 
-load().then(d => {
-  STATE.funds = d.funds;
-  const today = new Date().toISOString().slice(0, 10);
-  const staleWarn = d.date !== today
-    ? ` <b style="color:var(--warn)">数据来自 ${d.date}，非今日</b>` : '';
-  document.getElementById('meta').innerHTML = `更新于 ${d.updated_at}${staleWarn}`;
-  render();
-}).catch(e => {
-  document.getElementById('content').innerHTML =
-    `<p class="meta">数据加载失败：${e.message}</p>`;
-});
+fetch('data/latest.json?t='+Date.now())
+  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+  .then(d=>{
+    STATE.funds=d.funds;
+    const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Shanghai'});
+    const stale=d.date!==today;
+    document.getElementById('meta').innerHTML=
+      `数据更新于 <span class="num">${esc(d.updated_at.replace('T',' ').slice(0,16))}</span>`+
+      (stale?`<br><span class="warn-bar">⚠ 数据来自 ${esc(d.date)}，非今日</span>`:'');
+    render();
+  })
+  .catch(e=>{
+    document.getElementById('meta').textContent='加载失败';
+    document.getElementById('content').innerHTML=
+      `<div class="panel"><div class="state">数据加载失败：${esc(e.message)}<br>
+       请稍后重试，或查看 <a href="https://github.com/promise96319/qdii" style="color:var(--accent)">源码仓库</a></div></div>`;
+  });
 </script>
 </body>
 </html>
