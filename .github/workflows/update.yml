@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 安装测试依赖
+        run: python3 -m pip install -r requirements-dev.txt
+
       - name: 运行单元测试
         run: python3 -m pytest tests -q
 

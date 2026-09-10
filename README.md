@@ -35,12 +35,14 @@
 ## 本地运行
 
 ```bash
-python3 -m pytest tests -q     # 单元测试
-python3 scripts/build.py       # 抓取数据
-python3 -m http.server 8000    # 打开 http://localhost:8000/
+python3 -m pip install -r requirements-dev.txt   # 仅测试需要
+python3 -m pytest tests -q                        # 单元测试
+python3 scripts/build.py                          # 抓取数据
+python3 -m http.server 8000                       # 打开 http://localhost:8000/
 ```
 
-抓取脚本仅使用 Python 标准库，无需安装依赖。
+**抓取脚本 `scripts/build.py` 只用 Python 标准库，运行时零依赖**；
+`requirements-dev.txt` 里的 pytest 仅供跑测试用。
 
 ## 免责声明
 
