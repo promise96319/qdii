@@ -3,7 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>纳指100 / 标普500 场外基金限额速查</title>
+<title>纳指100 / 标普500 QDII基金限额速查 · 每日更新</title>
+<meta name="description" content="每日自动更新纳斯达克100、标普500 场外（QDII）基金的单日申购限额、申购状态与完整费率。QDII 额度紧张导致频繁限购，本站一屏回答「今天哪些基金能买、各能买多少、总费率多低」。数据每日 09:30 自动抓取。">
+<meta name="keywords" content="QDII基金,纳斯达克100,标普500,基金限额,申购限额,场外基金,基金定投,基金费率,限购,暂停申购">
+<meta name="author" content="promise96319">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://qdii.qinguanghui.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QDII 场外基金限额速查">
+<meta property="og:title" content="纳指100 / 标普500 QDII基金限额速查">
+<meta property="og:description" content="每日自动更新纳斯达克100、标普500 场外（QDII）基金的单日申购限额、申购状态与完整费率。QDII 额度紧张导致频繁限购，本站一屏回答「今天哪些基金能买、各能买多少、总费率多低」。数据每日 09:30 自动抓取。">
+<meta property="og:url" content="https://qdii.qinguanghui.com/">
+<meta property="og:image" content="https://qdii.qinguanghui.com/docs/assets/screenshot-dark.jpg">
+<meta property="og:locale" content="zh_CN">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="纳指100 / 标普500 QDII基金限额速查">
+<meta name="twitter:description" content="每日自动更新纳斯达克100、标普500 场外（QDII）基金的单日申购限额、申购状态与完整费率。QDII 额度紧张导致频繁限购，本站一屏回答「今天哪些基金能买、各能买多少、总费率多低」。数据每日 09:30 自动抓取。">
+<meta name="twitter:image" content="https://qdii.qinguanghui.com/docs/assets/screenshot-dark.jpg">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f7b3f'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='700' text-anchor='middle' fill='%23fff' font-family='system-ui'%3EQ%3C/text%3E%3C/svg%3E">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "QDII 场外基金限额速查",
+  "url": "https://qdii.qinguanghui.com/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-CN",
+  "description": "每日自动更新纳斯达克100、标普500 场外（QDII）基金的单日申购限额、申购状态与完整费率。QDII 额度紧张导致频繁限购，本站一屏回答「今天哪些基金能买、各能买多少、总费率多低」。数据每日 09:30 自动抓取。",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "author": { "@type": "Person", "name": "promise96319" },
+  "isAccessibleForFree": true
+}
+</script>
 <style>
 :root{
   --bg:#fafaf9; --surface:#ffffff; --text:#1c1e21; --muted:#6b7280;
@@ -48,6 +84,12 @@ td.limit{font-family:var(--mono);font-variant-numeric:tabular-nums;
 tr.stale{opacity:.55}
 .group-title{margin:24px 0 8px;font-size:14px;font-weight:600}
 footer{margin:32px 0 16px;color:var(--muted);font-size:12px;line-height:1.7}
+.seo-loading{color:var(--muted);font-size:13px;padding:20px 0}
+.seo-sum{font-size:13px;line-height:1.8;color:var(--text)}
+.seo-sum h2{font-size:14px;margin:18px 0 8px}
+.seo-sum ul{margin:0;padding-left:20px}
+.seo-sum li{margin:2px 0}
+.seo-sum .lead{margin:0 0 4px}
 .cards{display:none}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:6px;
   padding:10px 12px;margin-bottom:8px}
@@ -95,7 +137,7 @@ var _hmt = _hmt || [];
     <button id="theme" style="margin-left:auto" aria-label="切换主题">◐</button>
   </header>
   <div class="summary" id="summary"></div>
-  <div id="content"></div>
+  <div id="content"><!--SEO:START--><div class="seo-sum"><p class="lead">截至 2026-09-11，纳斯达克100 与标普500 场外基金共 57 只，其中 <strong>38 只今日可申购</strong>、19 只暂停申购，可申购基金单日限额合计约 1,514 元。</p><h2>纳斯达克 100（31 只可申购）</h2><ul><li>宝盈纳斯达克100指数发起(QDII)A人民币（019736）单日限额 200 元，年费 0.65%，买入费率 0.12%</li><li>宝盈纳斯达克100指数发起(QDII)C人民币（019737）单日限额 200 元，年费 0.90%，买入费率 0.00%</li><li>天弘纳斯达克100指数发起(QDII)A（018043）单日限额 100 元，年费 0.60%，买入费率 0.10%</li><li>万家纳斯达克100指数发起式(QDII)A（019441）单日限额 100 元，年费 0.65%，买入费率 0.10%</li><li>天弘纳斯达克100指数发起(QDII)C（018044）单日限额 100 元，年费 0.80%，买入费率 0.00%</li><li>万家纳斯达克100指数发起式(QDII)C（019442）单日限额 100 元，年费 0.85%，买入费率 0.00%</li><li>国泰纳斯达克100指数（160213）单日限额 100 元，年费 1.00%，买入费率 0.15%</li><li>摩根纳斯达克100指数(QDII)人民币A（019172）单日限额 10 元，年费 0.60%，买入费率 0.12%</li><li>南方纳斯达克100指数发起(QDII)A（016452）单日限额 10 元，年费 0.65%，买入费率 0.12%</li><li>汇添富纳斯达克100ETF发起式联接(QDII)人民币A（018966）单日限额 10 元，年费 0.65%，买入费率 0.12%</li><li>华泰柏瑞纳斯达克100ETF发起式联接(QDII)A（019524）单日限额 10 元，年费 0.65%，买入费率 0.12%</li><li>招商纳斯达克100ETF发起式联接(QDII)A（019547）单日限额 10 元，年费 0.65%，买入费率 0.12%</li><li>南方纳斯达克100指数发起(QDII)C（016453）单日限额 10 元，年费 0.75%，买入费率 0.00%</li><li>汇添富纳斯达克100ETF发起式联接(QDII)人民币E（021773）单日限额 10 元，年费 0.75%，买入费率 0.00%</li><li>华泰柏瑞纳斯达克100ETF发起式联接(QDII)I（022664）单日限额 10 元，年费 0.75%，买入费率 0.00%</li><li>华安纳斯达克100ETF联接(QDII)A（040046）单日限额 10 元，年费 0.80%，买入费率 0.12%</li><li>摩根纳斯达克100指数(QDII)人民币C（019173）单日限额 10 元，年费 0.90%，买入费率 0.00%</li><li>华泰柏瑞纳斯达克100ETF发起式联接(QDII)C（019525）单日限额 10 元，年费 0.90%，买入费率 0.00%</li><li>大成纳斯达克100ETF联接(QDII)A（000834）单日限额 10 元，年费 1.00%，买入费率 0.12%</li><li>华安纳斯达克100ETF联接(QDII)C（014978）单日限额 10 元，年费 1.00%，买入费率 0.00%</li><li>建信纳斯达克100指数(QDII)A人民币（539001）单日限额 10 元，年费 1.00%，买入费率 0.12%</li><li>汇添富纳斯达克100ETF发起式联接(QDII)人民币C（018967）单日限额 10 元，年费 1.05%，买入费率 0.00%</li><li>招商纳斯达克100ETF发起式联接(QDII)C（019548）单日限额 10 元，年费 1.05%，买入费率 0.00%</li><li>大成纳斯达克100ETF联接(QDII)C（008971）单日限额 10 元，年费 1.30%，买入费率 0.00%</li><li>建信纳斯达克100指数(QDII)C人民币（012752）单日限额 10 元，年费 1.30%，买入费率 0.00%</li><li>建信纳斯达克100指数(QDII)D人民币（023422）单日限额 10 元，年费 1.30%，买入费率 0.00%</li><li>广发纳斯达克100ETF联接人民币(QDII)A（270042）单日限额 2 元，年费 1.00%，买入费率 0.13%</li><li>广发纳斯达克100ETF联接人民币(QDII)C（006479）单日限额 2 元，年费 1.20%，买入费率 0.00%</li><li>南方纳斯达克100指数发起(QDII)I（021000）单日限额 未披露，年费 0.66%，买入费率 0.00%</li><li>天弘纳斯达克100指数发起(QDII)D（022525）单日限额 未披露，年费 0.80%，买入费率 0.00%</li><li>广发纳指100ETF联接(QDII)人民币F（021778）单日限额 未披露，年费 1.18%，买入费率 0.00%</li></ul><h2>标普 500（7 只可申购）</h2><ul><li>天弘标普500发起(QDII-FOF)A（007721）单日限额 100 元，年费 0.80%，买入费率 0.10%</li><li>天弘标普500发起(QDII-FOF)C（007722）单日限额 100 元，年费 1.05%，买入费率 0.00%</li><li>大成标普500等权重指数(QDII)A人民币（096001）单日限额 100 元，年费 1.20%，买入费率 0.15%</li><li>大成标普500等权重指数(QDII)C人民币（008401）单日限额 100 元，年费 1.50%，买入费率 0.00%</li><li>摩根标普500指数(QDII)人民币A（017641）单日限额 10 元，年费 0.65%，买入费率 0.12%</li><li>摩根标普500指数(QDII)人民币C（019305）单日限额 10 元，年费 0.95%，买入费率 0.00%</li><li>天弘标普500发起(QDII-FOF)D（022523）单日限额 未披露，年费 1.05%，买入费率 0.00%</li></ul><h2>今日暂停申购</h2><p>嘉实纳斯达克100ETF发起联接(QDII)A人民币（016532）、易方达纳斯达克100ETF联接(QDII-LOF)A(人民币)（161130）、博时纳斯达克100ETF发起式联接(QDII)A人民币（016055）、嘉实纳斯达克100ETF发起联接(QDII)I人民币（021838）、国泰标普500ETF发起联接(QDII)A人民币（017028）、华夏标普500ETF发起式联接(QDII)A(人民币)（018064）、华夏纳斯达克100ETF发起式联接(QDII)A（015299）、博时纳斯达克100ETF发起式联接(QDII)I人民币（024237）、博时标普500ETF联接A（050025）、博时标普500ETF联接E(人民币)（018738） 等 19 只。</p></div><!--SEO:END--></div>
   <footer>
     数据来源：天天基金（限额/费率）、蚂蚁基金（支付宝在售状态）。
     限额由基金公司公告设定，各代销渠道合并计算，同一代码在支付宝与微信共用额度；
