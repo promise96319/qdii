@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-13T16:03:28+08:00",
-  "date": "2026-10-13",
+  "updated_at": "2026-10-14T14:29:05+08:00",
+  "date": "2026-10-14",
   "source": "eastmoney + antfund",
   "count": 57,
   "funds": [
@@ -218,38 +218,6 @@
       "redeem_free_days": 30,
       "confirm_days": 2,
       "company": "万家基金",
-      "alipay": "正常申购",
-      "stale": false
-    },
-    {
-      "code": "019547",
-      "name": "招商纳斯达克100ETF发起式联接(QDII)A",
-      "index": "NDX100",
-      "share_class": "A",
-      "status": "限大额",
-      "max_buy": 10.0,
-      "min_buy": 10.0,
-      "fee_mgmt": 0.5,
-      "fee_trustee": 0.15,
-      "fee_sales": 0.0,
-      "fee_annual": 0.65,
-      "fee_buy": 0.12,
-      "fee_buy_original": 1.2,
-      "redeem_tiers": [
-        {
-          "min_days": 0,
-          "max_days": 7,
-          "rate": 1.5
-        },
-        {
-          "min_days": 7,
-          "max_days": null,
-          "rate": 0.0
-        }
-      ],
-      "redeem_free_days": 7,
-      "confirm_days": 2,
-      "company": "招商基金",
       "alipay": "正常申购",
       "stale": false
     },
@@ -568,38 +536,6 @@
       "redeem_free_days": 90,
       "confirm_days": 2,
       "company": "建信基金",
-      "alipay": "正常申购",
-      "stale": false
-    },
-    {
-      "code": "019548",
-      "name": "招商纳斯达克100ETF发起式联接(QDII)C",
-      "index": "NDX100",
-      "share_class": "C",
-      "status": "限大额",
-      "max_buy": 10.0,
-      "min_buy": 10.0,
-      "fee_mgmt": 0.5,
-      "fee_trustee": 0.15,
-      "fee_sales": 0.4,
-      "fee_annual": 1.05,
-      "fee_buy": 0.0,
-      "fee_buy_original": null,
-      "redeem_tiers": [
-        {
-          "min_days": 0,
-          "max_days": 7,
-          "rate": 1.5
-        },
-        {
-          "min_days": 7,
-          "max_days": null,
-          "rate": 0.0
-        }
-      ],
-      "redeem_free_days": 7,
-      "confirm_days": 2,
-      "company": "招商基金",
       "alipay": "正常申购",
       "stale": false
     },
@@ -1221,6 +1157,38 @@
       "redeem_free_days": 7,
       "confirm_days": 2,
       "company": "汇添富基金",
+      "alipay": "暂停销售",
+      "stale": false
+    },
+    {
+      "code": "019547",
+      "name": "招商纳斯达克100ETF发起式联接(QDII)A",
+      "index": "NDX100",
+      "share_class": "A",
+      "status": "暂停申购",
+      "max_buy": null,
+      "min_buy": 10.0,
+      "fee_mgmt": 0.5,
+      "fee_trustee": 0.15,
+      "fee_sales": 0.0,
+      "fee_annual": 0.65,
+      "fee_buy": 0.12,
+      "fee_buy_original": 1.2,
+      "redeem_tiers": [
+        {
+          "min_days": 0,
+          "max_days": 7,
+          "rate": 1.5
+        },
+        {
+          "min_days": 7,
+          "max_days": null,
+          "rate": 0.0
+        }
+      ],
+      "redeem_free_days": 7,
+      "confirm_days": 2,
+      "company": "招商基金",
       "alipay": "暂停销售",
       "stale": false
     },
@@ -1869,6 +1837,38 @@
       "redeem_free_days": 7,
       "confirm_days": 2,
       "company": "汇添富基金",
+      "alipay": "暂停销售",
+      "stale": false
+    },
+    {
+      "code": "019548",
+      "name": "招商纳斯达克100ETF发起式联接(QDII)C",
+      "index": "NDX100",
+      "share_class": "C",
+      "status": "暂停申购",
+      "max_buy": null,
+      "min_buy": 10.0,
+      "fee_mgmt": 0.5,
+      "fee_trustee": 0.15,
+      "fee_sales": 0.4,
+      "fee_annual": 1.05,
+      "fee_buy": 0.0,
+      "fee_buy_original": null,
+      "redeem_tiers": [
+        {
+          "min_days": 0,
+          "max_days": 7,
+          "rate": 1.5
+        },
+        {
+          "min_days": 7,
+          "max_days": null,
+          "rate": 0.0
+        }
+      ],
+      "redeem_free_days": 7,
+      "confirm_days": 2,
+      "company": "招商基金",
       "alipay": "暂停销售",
       "stale": false
     },
