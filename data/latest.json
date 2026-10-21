@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-20T14:19:36+08:00",
-  "date": "2026-10-20",
+  "updated_at": "2026-10-21T14:19:15+08:00",
+  "date": "2026-10-21",
   "source": "eastmoney + antfund",
   "count": 57,
   "funds": [
@@ -185,43 +185,6 @@
       "stale": false
     },
     {
-      "code": "019441",
-      "name": "万家纳斯达克100指数发起式(QDII)A",
-      "index": "NDX100",
-      "share_class": "A",
-      "status": "限大额",
-      "max_buy": 10.0,
-      "min_buy": 10.0,
-      "fee_mgmt": 0.5,
-      "fee_trustee": 0.15,
-      "fee_sales": 0.0,
-      "fee_annual": 0.65,
-      "fee_buy": 0.1,
-      "fee_buy_original": 1.0,
-      "redeem_tiers": [
-        {
-          "min_days": 0,
-          "max_days": 7,
-          "rate": 1.5
-        },
-        {
-          "min_days": 7,
-          "max_days": 30,
-          "rate": 0.1
-        },
-        {
-          "min_days": 30,
-          "max_days": null,
-          "rate": 0.0
-        }
-      ],
-      "redeem_free_days": 30,
-      "confirm_days": 2,
-      "company": "万家基金",
-      "alipay": "正常申购",
-      "stale": false
-    },
-    {
       "code": "019736",
       "name": "宝盈纳斯达克100指数发起(QDII)A人民币",
       "index": "NDX100",
@@ -282,38 +245,6 @@
       "redeem_free_days": 7,
       "confirm_days": 2,
       "company": "南方基金",
-      "alipay": "正常申购",
-      "stale": false
-    },
-    {
-      "code": "019442",
-      "name": "万家纳斯达克100指数发起式(QDII)C",
-      "index": "NDX100",
-      "share_class": "C",
-      "status": "限大额",
-      "max_buy": 10.0,
-      "min_buy": 10.0,
-      "fee_mgmt": 0.5,
-      "fee_trustee": 0.15,
-      "fee_sales": 0.2,
-      "fee_annual": 0.85,
-      "fee_buy": 0.0,
-      "fee_buy_original": null,
-      "redeem_tiers": [
-        {
-          "min_days": 0,
-          "max_days": 7,
-          "rate": 1.5
-        },
-        {
-          "min_days": 7,
-          "max_days": null,
-          "rate": 0.0
-        }
-      ],
-      "redeem_free_days": 7,
-      "confirm_days": 2,
-      "company": "万家基金",
       "alipay": "正常申购",
       "stale": false
     },
@@ -599,6 +530,43 @@
       "stale": false
     },
     {
+      "code": "019441",
+      "name": "万家纳斯达克100指数发起式(QDII)A",
+      "index": "NDX100",
+      "share_class": "A",
+      "status": "限大额",
+      "max_buy": 5.0,
+      "min_buy": 5.0,
+      "fee_mgmt": 0.5,
+      "fee_trustee": 0.15,
+      "fee_sales": 0.0,
+      "fee_annual": 0.65,
+      "fee_buy": 0.1,
+      "fee_buy_original": 1.0,
+      "redeem_tiers": [
+        {
+          "min_days": 0,
+          "max_days": 7,
+          "rate": 1.5
+        },
+        {
+          "min_days": 7,
+          "max_days": 30,
+          "rate": 0.1
+        },
+        {
+          "min_days": 30,
+          "max_days": null,
+          "rate": 0.0
+        }
+      ],
+      "redeem_free_days": 30,
+      "confirm_days": 2,
+      "company": "万家基金",
+      "alipay": "正常申购",
+      "stale": false
+    },
+    {
       "code": "019524",
       "name": "华泰柏瑞纳斯达克100ETF发起式联接(QDII)A",
       "index": "NDX100",
@@ -668,19 +636,19 @@
       "stale": false
     },
     {
-      "code": "040046",
-      "name": "华安纳斯达克100ETF联接(QDII)A",
+      "code": "019442",
+      "name": "万家纳斯达克100指数发起式(QDII)C",
       "index": "NDX100",
-      "share_class": "A",
+      "share_class": "C",
       "status": "限大额",
       "max_buy": 5.0,
       "min_buy": 5.0,
-      "fee_mgmt": 0.6,
-      "fee_trustee": 0.2,
-      "fee_sales": 0.0,
-      "fee_annual": 0.8,
-      "fee_buy": 0.12,
-      "fee_buy_original": 1.2,
+      "fee_mgmt": 0.5,
+      "fee_trustee": 0.15,
+      "fee_sales": 0.2,
+      "fee_annual": 0.85,
+      "fee_buy": 0.0,
+      "fee_buy_original": null,
       "redeem_tiers": [
         {
           "min_days": 0,
@@ -695,7 +663,7 @@
       ],
       "redeem_free_days": 7,
       "confirm_days": 2,
-      "company": "华安基金",
+      "company": "万家基金",
       "alipay": "正常申购",
       "stale": false
     },
@@ -728,38 +696,6 @@
       "redeem_free_days": 7,
       "confirm_days": 2,
       "company": "华泰柏瑞基金",
-      "alipay": "正常申购",
-      "stale": false
-    },
-    {
-      "code": "014978",
-      "name": "华安纳斯达克100ETF联接(QDII)C",
-      "index": "NDX100",
-      "share_class": "C",
-      "status": "限大额",
-      "max_buy": 5.0,
-      "min_buy": 5.0,
-      "fee_mgmt": 0.6,
-      "fee_trustee": 0.2,
-      "fee_sales": 0.2,
-      "fee_annual": 1.0,
-      "fee_buy": 0.0,
-      "fee_buy_original": null,
-      "redeem_tiers": [
-        {
-          "min_days": 0,
-          "max_days": 7,
-          "rate": 1.5
-        },
-        {
-          "min_days": 7,
-          "max_days": null,
-          "rate": 0.0
-        }
-      ],
-      "redeem_free_days": 7,
-      "confirm_days": 2,
-      "company": "华安基金",
       "alipay": "正常申购",
       "stale": false
     },
@@ -1353,6 +1289,38 @@
       "stale": false
     },
     {
+      "code": "040046",
+      "name": "华安纳斯达克100ETF联接(QDII)A",
+      "index": "NDX100",
+      "share_class": "A",
+      "status": "暂停申购",
+      "max_buy": null,
+      "min_buy": 5.0,
+      "fee_mgmt": 0.6,
+      "fee_trustee": 0.2,
+      "fee_sales": 0.0,
+      "fee_annual": 0.8,
+      "fee_buy": 0.12,
+      "fee_buy_original": 1.2,
+      "redeem_tiers": [
+        {
+          "min_days": 0,
+          "max_days": 7,
+          "rate": 1.5
+        },
+        {
+          "min_days": 7,
+          "max_days": null,
+          "rate": 0.0
+        }
+      ],
+      "redeem_free_days": 7,
+      "confirm_days": 2,
+      "company": "华安基金",
+      "alipay": "暂停销售",
+      "stale": false
+    },
+    {
       "code": "050025",
       "name": "博时标普500ETF联接A",
       "index": "SP500",
@@ -1519,6 +1487,38 @@
       "redeem_free_days": 7,
       "confirm_days": 2,
       "company": "博时基金",
+      "alipay": "暂停销售",
+      "stale": false
+    },
+    {
+      "code": "014978",
+      "name": "华安纳斯达克100ETF联接(QDII)C",
+      "index": "NDX100",
+      "share_class": "C",
+      "status": "暂停申购",
+      "max_buy": null,
+      "min_buy": 5.0,
+      "fee_mgmt": 0.6,
+      "fee_trustee": 0.2,
+      "fee_sales": 0.2,
+      "fee_annual": 1.0,
+      "fee_buy": 0.0,
+      "fee_buy_original": null,
+      "redeem_tiers": [
+        {
+          "min_days": 0,
+          "max_days": 7,
+          "rate": 1.5
+        },
+        {
+          "min_days": 7,
+          "max_days": null,
+          "rate": 0.0
+        }
+      ],
+      "redeem_free_days": 7,
+      "confirm_days": 2,
+      "company": "华安基金",
       "alipay": "暂停销售",
       "stale": false
     },
