@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-14T15:50:29+08:00",
-  "date": "2026-11-14",
+  "updated_at": "2026-11-15T16:10:48+08:00",
+  "date": "2026-11-15",
   "source": "eastmoney + antfund",
   "count": 57,
   "funds": [
@@ -1560,7 +1560,7 @@
       ],
       "redeem_free_days": 730,
       "confirm_days": 2,
-      "company": "国泰基金",
+      "company": "",
       "alipay": "暂停销售",
       "stale": false
     },
