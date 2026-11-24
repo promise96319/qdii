@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-23T17:29:04+08:00",
-  "date": "2026-11-23",
+  "updated_at": "2026-11-24T19:23:45+08:00",
+  "date": "2026-11-24",
   "source": "eastmoney + antfund",
   "count": 57,
   "funds": [
@@ -765,7 +765,7 @@
       "redeem_free_days": 30,
       "confirm_days": 2,
       "company": "天弘基金",
-      "alipay": "暂停销售",
+      "alipay": "正常申购",
       "stale": false
     },
     {
